@@ -16,29 +16,35 @@ class Timer {
     }
 
     start = () => {
-     
+        if(this.status === 'started' ){
+            return;
+        }
+
         if(this.onStart){
             this.onStart(this.timeRemaining);
         }
 
         this.tick();
         this.interval = setInterval(this.tick, 10);
+        this.status = 'started';
     }
 
     pause = () => {
         clearInterval(this.interval);
+        this.status = 'paused';
     }
 
     tick = () => {
-        this.timeRemaining = this.timeRemaining - .01;
+        
         if (this.timeRemaining <= 0) {
             this.pause();
+            this.status = 'completed';
             if(this.onComplete){
                 this.onComplete();
             }
             return;
         }
-
+        this.timeRemaining = this.timeRemaining - .01;
         if(this.onTick){
             this.onTick(this.timeRemaining);
         }
